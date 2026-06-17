@@ -6,9 +6,7 @@
     <title>EEMSI - Programme Infirmière Polyvalente</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
     <script src="https://cdn.tailwindcss.com"></script>
-    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <script>
@@ -38,9 +36,8 @@
     </script>
 
     <style>
-        /* Custom Animations */
         body {
-            background-color: #f0f9ff; /* sky-50 */
+            background-color: #f0f9ff;
             background-image: radial-gradient(#bae6fd 1px, transparent 1px);
             background-size: 20px 20px;
         }
@@ -51,7 +48,6 @@
             -webkit-backdrop-filter: blur(12px);
         }
 
-        /* Micro-interactions */
         .module-card {
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
@@ -73,7 +69,6 @@
             transform: translateY(-2px);
         }
 
-        /* Content Transition Animations */
         @keyframes fadeSlideUp {
             from {
                 opacity: 0;
@@ -103,9 +98,6 @@
         <h1 class="text-4xl md:text-5xl font-extrabold text-slate-900 mb-4 tracking-tight">
             Programme <span class="text-transparent bg-clip-text bg-gradient-to-r from-sky-500 to-sky-700">Infirmière Polyvalente</span>
         </h1>
-        <p class="text-lg text-slate-500 max-w-2xl mx-auto">
-            Découvrez le parcours de formation interactif sur 3 ans. Naviguez à travers les semestres pour visualiser votre progression vers l'excellence des soins.
-        </p>
     </header>
 
     <main class="w-full max-w-5xl glass-panel rounded-3xl shadow-xl border border-white p-6 sm:p-8 animate-content" style="animation-delay: 0.2s;">
@@ -131,8 +123,7 @@
             </div>
         </div>
 
-        <div class="flex flex-wrap gap-2 justify-center mb-8" id="nav-container">
-            </div>
+        <div class="flex flex-wrap gap-2 justify-center mb-8" id="nav-container"></div>
 
         <div class="relative min-h-[300px]">
             <div class="flex justify-between items-center mb-6 border-b border-sky-100 pb-4">
@@ -150,8 +141,7 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="modules-container">
-                </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="modules-container"></div>
         </div>
 
     </main>
@@ -161,11 +151,6 @@
     </footer>
 
     <script>
-        /**
-         * ==========================================
-         * 1. DATA STRUCTURE (JSON) - FACILE À MODIFIER
-         * ==========================================
-         */
         const curriculumData = [
             {
                 id: 1,
@@ -239,16 +224,10 @@
             }
         ];
 
-        /**
-         * ==========================================
-         * 2. APPLICATION LOGIC & STATE
-         * ==========================================
-         */
         const state = {
             currentSemesterIndex: 0
         };
 
-        // DOM Elements
         const navContainer = document.getElementById('nav-container');
         const modulesContainer = document.getElementById('modules-container');
         const semesterTitle = document.getElementById('semester-title').querySelector('span');
@@ -259,14 +238,12 @@
         const progressText = document.getElementById('progress-text');
         const progressPercentage = document.getElementById('progress-percentage');
 
-        // Initialization
         function initApp() {
             renderNavigation();
             updateUI();
             attachEventListeners();
         }
 
-        // Render Navigation Tabs
         function renderNavigation() {
             navContainer.innerHTML = '';
             curriculumData.forEach((semester, index) => {
@@ -278,24 +255,19 @@
             });
         }
 
-        // Render Modules Grid with animations
         function renderModules() {
             const semester = curriculumData[state.currentSemesterIndex];
             
-            // Update Title
             semesterTitle.textContent = `${semester.title} - (Année ${semester.year})`;
 
-            // Clear container and trigger reflow for animation restart
             modulesContainer.innerHTML = '';
             modulesContainer.classList.remove('animate-content');
-            void modulesContainer.offsetWidth; // Trigger reflow
+            void modulesContainer.offsetWidth;
             modulesContainer.classList.add('animate-content');
 
-            // Inject Modules
             semester.modules.forEach((mod, idx) => {
                 const card = document.createElement('div');
                 card.className = 'module-card bg-white border border-slate-100 rounded-2xl p-5 shadow-sm flex flex-col justify-between cursor-default';
-                // Cascading delay for visual appeal
                 card.style.animationDelay = `${idx * 0.1}s`;
                 
                 card.innerHTML = `
@@ -316,7 +288,6 @@
             });
         }
 
-        // Update Global Progress Bar
         function updateProgress() {
             const totalSemesters = curriculumData.length;
             const currentSem = state.currentSemesterIndex + 1;
@@ -328,12 +299,10 @@
             progressText.textContent = `Année ${currentData.year} - ${currentData.title}`;
         }
 
-        // Update all UI elements based on current state
         function updateUI() {
             renderModules();
             updateProgress();
             
-            // Update Navigation Tabs active state
             const tabs = navContainer.querySelectorAll('.nav-btn');
             tabs.forEach((tab, idx) => {
                 if (idx === state.currentSemesterIndex) {
@@ -343,7 +312,6 @@
                 }
             });
 
-            // Update Prev/Next buttons
             btnPrev.disabled = state.currentSemesterIndex === 0;
             btnNext.disabled = state.currentSemesterIndex === curriculumData.length - 1;
         }
@@ -356,12 +324,10 @@
             }
         }
 
-        // Attach listeners for Prev/Next
         function attachEventListeners() {
             btnPrev.addEventListener('click', () => changeSemester(state.currentSemesterIndex - 1));
             btnNext.addEventListener('click', () => changeSemester(state.currentSemesterIndex + 1));
             
-            // Swipe support (Touch Events for Mobile)
             let touchStartX = 0;
             let touchEndX = 0;
             
@@ -375,21 +341,17 @@
             }, {passive: true});
 
             function handleSwipe() {
-                const threshold = 50; // minimum distance to register swipe
+                const threshold = 50;
                 if (touchEndX < touchStartX - threshold) {
-                    // Swipe Left -> Next Semester
                     changeSemester(state.currentSemesterIndex + 1);
                 }
                 if (touchEndX > touchStartX + threshold) {
-                    // Swipe Right -> Prev Semester
                     changeSemester(state.currentSemesterIndex - 1);
                 }
             }
         }
 
-        // Start App
         document.addEventListener('DOMContentLoaded', initApp);
-
     </script>
 </body>
 </html>

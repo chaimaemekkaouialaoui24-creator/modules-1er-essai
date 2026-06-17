@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EEMSI - Programme Infirmière Polyvalente</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        sky: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Animations */
+        body {
+            background-color: #f0f9ff; /* sky-50 */
+            background-image: radial-gradient(#bae6fd 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        /* Micro-interactions */
+        .module-card {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .module-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 25px -5px rgba(14, 165, 233, 0.15), 0 8px 10px -6px rgba(14, 165, 233, 0.1);
+            border-color: #38bdf8;
+        }
+
+        .nav-btn {
+            transition: all 0.3s ease;
+        }
+        
+        .nav-btn.active {
+            background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+            color: white;
+            box-shadow: 0 4px 14px 0 rgba(14, 165, 233, 0.39);
+            transform: translateY(-2px);
+        }
+
+        /* Content Transition Animations */
+        @keyframes fadeSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-content {
+            animation: fadeSlideUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
+        .progress-bar-fill {
+            transition: width 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased min-h-screen flex flex-col items-center py-10 px-4 sm:px-6 lg:px-8">
+
+    <header class="w-full max-w-5xl text-center mb-10 animate-content" style="animation-delay: 0.1s;">
+        <div class="inline-block mb-4 px-6 py-2 rounded-full bg-sky-100 text-sky-700 font-bold tracking-widest text-sm uppercase shadow-sm border border-sky-200">
+            <i class="fa-solid fa-graduation-cap mr-2"></i> École de santé EEMSI
+        </div>
+        <h1 class="text-4xl md:text-5xl font-extrabold text-slate-900 mb-4 tracking-tight">
+            Programme <span class="text-transparent bg-clip-text bg-gradient-to-r from-sky-500 to-sky-700">Infirmière Polyvalente</span>
+        </h1>
+        <p class="text-lg text-slate-500 max-w-2xl mx-auto">
+            Découvrez le parcours de formation interactif sur 3 ans. Naviguez à travers les semestres pour visualiser votre progression vers l'excellence des soins.
+        </p>
+    </header>
+
+    <main class="w-full max-w-5xl glass-panel rounded-3xl shadow-xl border border-white p-6 sm:p-8 animate-content" style="animation-delay: 0.2s;">
+        
+        <div class="mb-10">
+            <div class="flex justify-between items-end mb-2">
+                <div>
+                    <h3 class="text-sm font-semibold text-sky-600 uppercase tracking-wider">Progression globale</h3>
+                    <p class="text-2xl font-bold text-slate-800" id="progress-text">Année 1 - Semestre 1</p>
+                </div>
+                <div class="text-right">
+                    <span class="text-3xl font-extrabold text-sky-500" id="progress-percentage">16%</span>
+                </div>
+            </div>
+            <div class="w-full bg-sky-100 rounded-full h-3 mb-1 overflow-hidden">
+                <div class="bg-gradient-to-r from-sky-400 to-sky-600 h-3 rounded-full progress-bar-fill relative" id="progress-bar" style="width: 16%">
+                    <div class="absolute top-0 right-0 bottom-0 left-0 bg-white opacity-20" style="animation: pulse 2s infinite;"></div>
+                </div>
+            </div>
+            <div class="flex justify-between text-xs text-slate-400 font-medium px-1">
+                <span>Début</span>
+                <span>Diplôme</span>
+            </div>
+        </div>
+
+        <div class="flex flex-wrap gap-2 justify-center mb-8" id="nav-container">
+            </div>
+
+        <div class="relative min-h-[300px]">
+            <div class="flex justify-between items-center mb-6 border-b border-sky-100 pb-4">
+                <h2 class="text-2xl font-bold text-slate-800 flex items-center" id="semester-title">
+                    <i class="fa-solid fa-book-medical text-sky-500 mr-3"></i> 
+                    <span>Semestre 1</span>
+                </h2>
+                <div class="flex space-x-2">
+                    <button id="btn-prev" class="w-10 h-10 rounded-full bg-white border border-slate-200 text-slate-500 hover:text-sky-600 hover:border-sky-300 hover:bg-sky-50 transition-all flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed shadow-sm">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </button>
+                    <button id="btn-next" class="w-10 h-10 rounded-full bg-white border border-slate-200 text-slate-500 hover:text-sky-600 hover:border-sky-300 hover:bg-sky-50 transition-all flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed shadow-sm">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="modules-container">
+                </div>
+        </div>
+
+    </main>
+
+    <footer class="mt-12 text-center text-slate-400 text-sm animate-content" style="animation-delay: 0.3s;">
+        <p>&copy; 2026 École de santé EEMSI. Tous droits réservés.</p>
+    </footer>
+
+    <script>
+        /**
+         * ==========================================
+         * 1. DATA STRUCTURE (JSON) - FACILE À MODIFIER
+         * ==========================================
+         */
+        const curriculumData = [
+            {
+                id: 1,
+                year: 1,
+                title: "Semestre 1",
+                modules: [
+                    { name: "Module 1 : Sciences fondamentales", hours: "Environs 60h", icon: "fa-dna" },
+                    { name: "Module 2 : Introduction à la profession", hours: "Environs 45h", icon: "fa-user-nurse" },
+                    { name: "Module 3 : Anatomie et Physiologie", hours: "Environs 50h", icon: "fa-bone" },
+                    { name: "Module 4 : Hygiène et Infectiologie", hours: "Environs 40h", icon: "fa-hands-bubbles" },
+                    { name: "Module 5 : Soins de base 1", hours: "Environs 60h", icon: "fa-bed-pulse" }
+                ]
+            },
+            {
+                id: 2,
+                year: 1,
+                title: "Semestre 2",
+                modules: [
+                    { name: "Module 6 : Santé publique", hours: "Environs 45h", icon: "fa-earth-americas" },
+                    { name: "Module 7 : Pharmacologie de base", hours: "Environs 50h", icon: "fa-pills" },
+                    { name: "Module 8 : Soins de base 2", hours: "Environs 60h", icon: "fa-stethoscope" },
+                    { name: "Module 9 : Communication en santé", hours: "Environs 30h", icon: "fa-comments" },
+                    { name: "Module 10 : Stage d'initiation", hours: "Environs 120h", icon: "fa-hospital" }
+                ]
+            },
+            {
+                id: 3,
+                year: 2,
+                title: "Semestre 3",
+                modules: [
+                    { name: "Module 11 : Pathologies médicales", hours: "Environs 60h", icon: "fa-microscope" },
+                    { name: "Module 12 : Soins infirmiers en médecine", hours: "Environs 55h", icon: "fa-syringe" },
+                    { name: "Module 13 : Pédiatrie et Néonatalogie", hours: "Environs 50h", icon: "fa-baby" },
+                    { name: "Module 14 : Gynécologie-Obstétrique", hours: "Environs 45h", icon: "fa-person-pregnant" },
+                    { name: "Module 15 : Stage en médecine", hours: "Environs 140h", icon: "fa-user-doctor" }
+                ]
+            },
+            {
+                id: 4,
+                year: 2,
+                title: "Semestre 4",
+                modules: [
+                    { name: "Module 16 : Pathologies chirurgicales", hours: "Environs 60h", icon: "fa-scalpel" },
+                    { name: "Module 17 : Soins infirmiers en chirurgie", hours: "Environs 55h", icon: "fa-truck-medical" },
+                    { name: "Module 18 : Santé mentale et Psychiatrie", hours: "Environs 50h", icon: "fa-brain" },
+                    { name: "Module 19 : Urgences et Réanimation", hours: "Environs 45h", icon: "fa-heart-pulse" },
+                    { name: "Module 20 : Stage en chirurgie", hours: "Environs 140h", icon: "fa-hospital-user" }
+                ]
+            },
+            {
+                id: 5,
+                year: 3,
+                title: "Semestre 5",
+                modules: [
+                    { name: "Module 21 : Soins aux personnes âgées", hours: "Environs 45h", icon: "fa-person-cane" },
+                    { name: "Module 22 : Droit, Éthique et Déontologie", hours: "Environs 40h", icon: "fa-scale-balanced" },
+                    { name: "Module 23 : Méthodologie de recherche", hours: "Environs 50h", icon: "fa-magnifying-glass-chart" },
+                    { name: "Module 24 : Management et Leadership", hours: "Environs 45h", icon: "fa-people-group" },
+                    { name: "Module 25 : Stage de spécialité", hours: "Environs 160h", icon: "fa-clipboard-user" }
+                ]
+            },
+            {
+                id: 6,
+                year: 3,
+                title: "Semestre 6",
+                modules: [
+                    { name: "Module 26 : Projet de Fin d'Études (PFE)", hours: "Environs 80h", icon: "fa-graduation-cap" },
+                    { name: "Module 27 : Préparation à l'insertion pro", hours: "Environs 30h", icon: "fa-briefcase" },
+                    { name: "Module 28 : Stage d'intégration clinique", hours: "Environs 240h", icon: "fa-star-of-life" }
+                ]
+            }
+        ];
+
+        /**
+         * ==========================================
+         * 2. APPLICATION LOGIC & STATE
+         * ==========================================
+         */
+        const state = {
+            currentSemesterIndex: 0
+        };
+
+        // DOM Elements
+        const navContainer = document.getElementById('nav-container');
+        const modulesContainer = document.getElementById('modules-container');
+        const semesterTitle = document.getElementById('semester-title').querySelector('span');
+        const btnPrev = document.getElementById('btn-prev');
+        const btnNext = document.getElementById('btn-next');
+        
+        const progressBar = document.getElementById('progress-bar');
+        const progressText = document.getElementById('progress-text');
+        const progressPercentage = document.getElementById('progress-percentage');
+
+        // Initialization
+        function initApp() {
+            renderNavigation();
+            updateUI();
+            attachEventListeners();
+        }
+
+        // Render Navigation Tabs
+        function renderNavigation() {
+            navContainer.innerHTML = '';
+            curriculumData.forEach((semester, index) => {
+                const btn = document.createElement('button');
+                btn.className = `nav-btn px-5 py-2.5 rounded-xl font-semibold text-sm border ${index === state.currentSemesterIndex ? 'active border-transparent' : 'bg-white border-slate-200 text-slate-600 hover:bg-sky-50 hover:border-sky-200'}`;
+                btn.innerHTML = `S${semester.id}`;
+                btn.onclick = () => changeSemester(index);
+                navContainer.appendChild(btn);
+            });
+        }
+
+        // Render Modules Grid with animations
+        function renderModules() {
+            const semester = curriculumData[state.currentSemesterIndex];
+            
+            // Update Title
+            semesterTitle.textContent = `${semester.title} - (Année ${semester.year})`;
+
+            // Clear container and trigger reflow for animation restart
+            modulesContainer.innerHTML = '';
+            modulesContainer.classList.remove('animate-content');
+            void modulesContainer.offsetWidth; // Trigger reflow
+            modulesContainer.classList.add('animate-content');
+
+            // Inject Modules
+            semester.modules.forEach((mod, idx) => {
+                const card = document.createElement('div');
+                card.className = 'module-card bg-white border border-slate-100 rounded-2xl p-5 shadow-sm flex flex-col justify-between cursor-default';
+                // Cascading delay for visual appeal
+                card.style.animationDelay = `${idx * 0.1}s`;
+                
+                card.innerHTML = `
+                    <div class="flex items-start mb-4">
+                        <div class="w-12 h-12 rounded-xl bg-sky-50 flex items-center justify-center text-sky-500 text-xl mr-4 flex-shrink-0">
+                            <i class="fa-solid ${mod.icon}"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-slate-800 leading-tight">${mod.name}</h4>
+                        </div>
+                    </div>
+                    <div class="mt-auto pt-3 border-t border-slate-50 flex items-center text-sm font-medium text-slate-500">
+                        <i class="fa-regular fa-clock text-sky-400 mr-2"></i>
+                        ${mod.hours}
+                    </div>
+                `;
+                modulesContainer.appendChild(card);
+            });
+        }
+
+        // Update Global Progress Bar
+        function updateProgress() {
+            const totalSemesters = curriculumData.length;
+            const currentSem = state.currentSemesterIndex + 1;
+            const percentage = Math.round((currentSem / totalSemesters) * 100);
+            const currentData = curriculumData[state.currentSemesterIndex];
+
+            progressBar.style.width = `${percentage}%`;
+            progressPercentage.textContent = `${percentage}%`;
+            progressText.textContent = `Année ${currentData.year} - ${currentData.title}`;
+        }
+
+        // Update all UI elements based on current state
+        function updateUI() {
+            renderModules();
+            updateProgress();
+            
+            // Update Navigation Tabs active state
+            const tabs = navContainer.querySelectorAll('.nav-btn');
+            tabs.forEach((tab, idx) => {
+                if (idx === state.currentSemesterIndex) {
+                    tab.className = 'nav-btn px-5 py-2.5 rounded-xl font-semibold text-sm border active border-transparent';
+                } else {
+                    tab.className = 'nav-btn px-5 py-2.5 rounded-xl font-semibold text-sm border bg-white border-slate-200 text-slate-600 hover:bg-sky-50 hover:border-sky-200';
+                }
+            });
+
+            // Update Prev/Next buttons
+            btnPrev.disabled = state.currentSemesterIndex === 0;
+            btnNext.disabled = state.currentSemesterIndex === curriculumData.length - 1;
+        }
+
+        // Change Semester Logic
+        function changeSemester(newIndex) {
+            if (newIndex >= 0 && newIndex < curriculumData.length) {
+                state.currentSemesterIndex = newIndex;
+                updateUI();
+            }
+        }
+
+        // Attach listeners for Prev/Next
+        function attachEventListeners() {
+            btnPrev.addEventListener('click', () => changeSemester(state.currentSemesterIndex - 1));
+            btnNext.addEventListener('click', () => changeSemester(state.currentSemesterIndex + 1));
+            
+            // Swipe support (Touch Events for Mobile)
+            let touchStartX = 0;
+            let touchEndX = 0;
+            
+            modulesContainer.addEventListener('touchstart', e => {
+                touchStartX = e.changedTouches[0].screenX;
+            }, {passive: true});
+
+            modulesContainer.addEventListener('touchend', e => {
+                touchEndX = e.changedTouches[0].screenX;
+                handleSwipe();
+            }, {passive: true});
+
+            function handleSwipe() {
+                const threshold = 50; // minimum distance to register swipe
+                if (touchEndX < touchStartX - threshold) {
+                    // Swipe Left -> Next Semester
+                    changeSemester(state.currentSemesterIndex + 1);
+                }
+                if (touchEndX > touchStartX + threshold) {
+                    // Swipe Right -> Prev Semester
+                    changeSemester(state.currentSemesterIndex - 1);
+                }
+            }
+        }
+
+        // Start App
+        document.addEventListener('DOMContentLoaded', initApp);
+
+    </script>
+</body>
+</html>
